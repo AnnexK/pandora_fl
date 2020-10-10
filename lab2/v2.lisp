@@ -6,7 +6,7 @@
       t
       (if (not (funcall p (car x)))
 	  nil
-	  (all p (cdr x)))))
+	  (my-all p (cdr x)))))
 
 (defun my-p (x) (= x 3))
 
