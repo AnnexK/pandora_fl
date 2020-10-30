@@ -6,9 +6,6 @@
 	   (eq sym 'u)
 	   (eq sym 'y))))
 
-(defun pre-last (list)
-  (if (null (cddr list)) list (pre-last (cdr list))))
-
 (defun plural (word)
   (if (not (null (cddr word)))
       (cons (car word) (plural (cdr word)))
