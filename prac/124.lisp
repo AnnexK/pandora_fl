@@ -1,0 +1,43 @@
+(defun consonant? (sym)
+  (not (or (eq sym 'a)
+	   (eq sym 'e)
+	   (eq sym 'i)
+	   (eq sym 'o)
+	   (eq sym 'u)
+	   (eq sym 'y))))
+
+(defun pre-last (list)
+  (if (null (cddr list)) list (pre-last (cdr list))))
+
+(defun plural (word)
+  (if (not (null (cddr word)))
+      (cons (car word) (plural (cdr word)))
+      (if (eq (cadr word) 'y)
+	  (cons (car word) '(i e s))
+	  (if (and (eq (cadr word) 'o) (consonant? (car word)))
+	      (cons (car word) (cons (cadr word) '(e s)))
+	      (cons (car word) (cons (cadr word) '(s)))))))
+
+(defun better-plural (word)
+  (cond ((not (null (cddr word)))
+	 (cons (car word) (plural (cdr word))))
+	((eq (cadr word) 'y)
+	 (cons (car word) '(i e s)))
+	((and (eq (cadr word) 'o) (consonant? (car word)))
+	 (cons (car word) (cons (cadr word) '(e s))))
+	(t
+	 (cons (car word) (cons (cadr word) '(s))))))
+				       
+(defun best-plural (word)
+  (iter-plural nil word))
+
+(defun iter-plural (res word)
+  (if (not (null (cddr word)))
+      (iter-plural (cons (car word) res) (cdr word))
+      (let ((inflex (cond ((eq (cadr word) 'y)
+			   (cons (car word) '(i e s)))
+			  ((and (eq (cadr word) 'o) (consonant? (car word)))
+			   (cons (car word) (cons (cadr word) '(e s))))
+			  (t
+			   (cons (car word) (cons (cadr word) '(s)))))))
+	(append (reverse res) inflex))))
